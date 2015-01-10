@@ -460,19 +460,15 @@ class Refactoring(object): # noqa
                 if not input_str:
                     return False
 
+                changes = self.get_changes(refactor, input_str)
+
                 action = env.user_input_choices(
-                    'Choose what to do:', 'perform', 'preview',
-                        'perform in class hierarchy',
-                        'preview in class hierarchy')
-
-                in_hierarchy = action.endswith("in class hierarchy")
-
-                changes = self.get_changes(refactor, input_str, in_hierarchy)
+                    'Choose what to do:', 'perform', 'preview')
 
                 if not action:
                     return False
 
-                if action.startswith('preview'):
+                if action == 'preview':
                     print("\n   ")
                     print("-------------------------------")
                     print("\n%s\n" % changes.get_description())
@@ -504,7 +500,7 @@ class Refactoring(object): # noqa
         return True
 
     @staticmethod
-    def get_changes(refactor, input_str, in_hierarchy=False):
+    def get_changes(refactor, input_str):
         """ Get changes.
 
         :return Changes:
@@ -512,7 +508,7 @@ class Refactoring(object): # noqa
         """
         progress = ProgressHandler('Calculate changes ...')
         return refactor.get_changes(
-            input_str, task_handle=progress.handle, in_hierarchy = in_hierarchy)
+            input_str, task_handle=progress.handle)
 
 
 class RenameRefactoring(Refactoring):
